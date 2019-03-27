@@ -1,12 +1,15 @@
-import Ember from 'ember';
 import RavenService from 'ember-cli-sentry/services/raven';
 
-export default RavenService.extend({
-    releaseMetaName: 'sentry:revision',
-    release: Ember.computed('releaseMetaName', {
-        get: function() {
-            return document.querySelector(`meta[name='${this.get('releaseMetaName')}']`).content;
-        }
-    })
-});
+import { computed } from '@ember/object';
 
+export default RavenService.extend({
+  releaseMetaName: 'sentry:revision',
+
+  release: computed('releaseMetaName', function() {
+    let node = document.querySelector(`meta[name='${this.releaseMetaName}']`);
+
+    if (node) {
+      return node.content;
+    }
+  }),
+});
